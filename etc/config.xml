@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © 2025 NobleCommerce. All rights reserved.
+  See COPYING.txt for license details.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <yuno_full_checkout>
+                <yuno_general>
+                    <enabled>0</enabled>
+                    <title>Yuno Payment</title>
+                </yuno_general>
+                <yuno_credentials>
+                    <environment>sandbox</environment>
+                    <sandbox_public_api_key></sandbox_public_api_key>
+                    <sandbox_private_secret_key></sandbox_private_secret_key>
+                    <production_public_api_key></production_public_api_key>
+                    <production_private_secret_key></production_private_secret_key>
+                    <account_id></account_id>
+                </yuno_credentials>
+                <yuno_behavior>
+                    <auto_capture>1</auto_capture>
+                    <pending_status>pending</pending_status>
+                    <enabled_methods></enabled_methods>
+                </yuno_behavior>
+                <yuno_security>
+                    <webhook_secret></webhook_secret>
+                </yuno_security>
+                <yuno_logs>
+                    <log_level>none</log_level>
+                </yuno_logs>
+            </yuno_full_checkout>
+        </payment>
+    </default>
+</config>
