@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © 2025 NobleCommerce. All rights reserved.
+  See COPYING.txt for license details.
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\App\Router\ActionList">
+        <arguments>
+            <argument name="invokables" xsi:type="array">
+                <item name="yuno_webhook_notify" xsi:type="string">NobleCommerce\Yuno\Controller\Webhook\Notify</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Request\ValidatorInterface">
+        <plugin name="yuno_webhook_csrf"
+                type="NobleCommerce\Yuno\Plugin\App\Request\Validator\BypassCsrfForWebhook" />
+    </type>
+</config>
