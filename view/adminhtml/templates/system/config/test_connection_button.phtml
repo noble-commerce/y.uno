@@ -1,0 +1,33 @@
+<?php
+/*
+ * Copyright © 2025 NobleCommerce. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+/** @var $block Template */
+
+use Magento\Backend\Block\Template;
+
+$buttonId = $block->getData('button_id');
+$ajaxUrl = $block->getData('ajax_url');
+?>
+
+<div class="admin__field-control">
+    <button type="button"
+            id="<?= $buttonId ?>"
+            class="scalable"
+            data-url="<?= $ajaxUrl ?>">
+        <span><?= __('Test Yuno Connection') ?></span>
+    </button>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "#<?= $buttonId ?>": {
+        "NobleCommerce_Yuno/js/test-connection": {
+            "url": "<?= $ajaxUrl ?>"
+        }
+    }
+}
+</script>
