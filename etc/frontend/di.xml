@@ -16,4 +16,12 @@
         <plugin name="yuno_webhook_csrf"
                 type="NobleCommerce\Yuno\Plugin\App\Request\Validator\BypassCsrfForWebhook" />
     </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="yuno" xsi:type="object">NobleCommerce\Yuno\Model\Ui\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>

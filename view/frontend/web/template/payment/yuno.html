@@ -1,0 +1,18 @@
+<!--
+  Copyright © 2025 NobleCommerce. All rights reserved.
+  See COPYING.txt for license details.
+-->
+<div class="payment-method" data-bind="css: {'_active': isChecked()}">
+    <div class="payment-method-title field choice">
+        <input type="radio"
+               name="payment[method]"
+               class="radio"
+               data-bind="attr: {id: getCode()}, value: getCode(), checked: isChecked" />
+        <label data-bind="attr: {for: getCode()}">
+            <span data-bind="i18n: 'Payment with Yuno'"></span>
+        </label>
+    </div>
+    <div class="payment-method-content">
+        <p data-bind="i18n: 'You will be redirected to Yuno's secure checkout after clicking Checkout.'"></p>
+    </div>
+</div>
