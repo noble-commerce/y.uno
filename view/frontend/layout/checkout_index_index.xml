@@ -11,5 +11,16 @@
                    name="yuno.checkout.sdk"
                    template="NobleCommerce_Yuno::sdk_loader.phtml" />
         </referenceContainer>
+        <referenceBlock name="checkout.payment.methods.list">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="yuno" xsi:type="array">
+                            <item name="component" xsi:type="string">NobleCommerce_Yuno/js/view/payment/method-renderer/yuno-method</item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

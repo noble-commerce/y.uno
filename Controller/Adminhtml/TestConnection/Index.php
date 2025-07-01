@@ -10,42 +10,48 @@ namespace NobleCommerce\Yuno\Controller\Adminhtml\TestConnection;
 use GuzzleHttp\Client;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use NobleCommerce\Yuno\Model\Config\ConfigProvider;
 
 class Index extends Action
 {
-    public const string ADMIN_RESOURCE = 'NobleCommerce_Yuno::yuno_full_checkout';
-
-    protected JsonFactory $resultJsonFactory;
-    protected ConfigProvider $configProvider;
-    protected EncryptorInterface $encryptor;
-
-    private const string SANDBOX_URL = 'https://api-sandbox.y.uno/v1/customers/';
-    private const string PRODUCTION_URL = 'https://api.y.uno/v1/customers/';
-
+    /**
+     * Index Constructor
+     *
+     * @param Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param ConfigProvider $configProvider
+     * @param EncryptorInterface $encryptor
+     */
     public function __construct(
-        Context $context,
-        JsonFactory $resultJsonFactory,
-        ConfigProvider $configProvider,
-        EncryptorInterface $encryptor
+        private readonly Context $context,
+        protected readonly JsonFactory $resultJsonFactory,
+        protected readonly ConfigProvider $configProvider,
+        protected readonly EncryptorInterface $encryptor
     ) {
         parent::__construct($context);
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->configProvider = $configProvider;
-        $this->encryptor = $encryptor;
     }
 
-    public function execute()
+    /**
+     * Execute
+     *
+     * @return ResponseInterface|Json|ResultInterface
+     */
+    public function execute(): Json|ResultInterface|ResponseInterface
     {
         $result = $this->resultJsonFactory->create();
         $environment = $this->configProvider->getEnvironment();
         $userId = $this->configProvider->getUserId();
+        $sandboxBaseUrl = $this->configProvider->getSandboxBaseUrl();
+        $productionBaseUrl = $this->configProvider->getProductionBaseUrl();
 
         if ($environment === 'sandbox') {
             return $this->testConnection(
-                self::SANDBOX_URL,
+                $sandboxBaseUrl,
                 $userId,
                 $this->configProvider->getSandboxPublicApiKey(),
                 $this->configProvider->getSandboxPrivateSecretKey(),
@@ -55,7 +61,7 @@ class Index extends Action
 
         if ($environment === 'production') {
             return $this->testConnection(
-                self::PRODUCTION_URL,
+                $productionBaseUrl,
                 $userId,
                 $this->configProvider->getProductionPublicApiKey(),
                 $this->configProvider->getProductionPrivateSecretKey(),
@@ -69,13 +75,24 @@ class Index extends Action
         ]);
     }
 
+    /**
+     * TestConnection
+     *
+     * @param string $baseUrl
+     * @param string|null $userId
+     * @param string|null $publicKey
+     * @param string|null $privateKey
+     * @param $result
+     * @return mixed
+     */
     private function testConnection(
         string $baseUrl,
         ?string $userId,
         ?string $publicKey,
         ?string $privateKey,
         $result
-    ) {
+    ): mixed
+    {
         if (!$publicKey || !$privateKey) {
             return $result->setData([
                 'success' => false,
@@ -84,6 +101,7 @@ class Index extends Action
         }
 
         $privateKeyDecrypted = $this->encryptor->decrypt($privateKey);
+        $publicKeyDecrypted = $this->encryptor->decrypt($publicKey);
 
         try {
             $client = new Client();
@@ -95,7 +113,7 @@ class Index extends Action
                     'accept' => 'application/json',
                     'content-type' => 'application/json',
                     'private-secret-key' => $privateKeyDecrypted,
-                    'public-api-key' => $publicKey,
+                    'public-api-key' => $publicKeyDecrypted,
                 ],
                 'http_errors' => false,
                 'timeout' => 5,

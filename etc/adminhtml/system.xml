@@ -9,7 +9,7 @@
             <resource>NobleCommerce_Yuno::yuno_full_checkout</resource>
             <group id="yuno_full_checkout" translate="label" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Yuno Full Checkout</label>
-                <group id="yuno_general" translate="label" type="text" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="yuno_general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>General</label>
                     <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Enable Module</label>
@@ -19,16 +19,17 @@
                         <label>Title of Payment Method on Checkout</label>
                     </field>
                 </group>
-                <group id="yuno_credentials" translate="label" type="text" sortOrder="910" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="yuno_credentials" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credentials</label>
                     <field id="environment" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Environment</label>
                         <source_model>NobleCommerce\Yuno\Model\Config\Source\Environment</source_model>
                         <comment>Select Sandbox for testing or Production for live transactions</comment>
                     </field>
-                    <field id="sandbox_public_api_key" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="sandbox_public_api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sandbox Public API Key</label>
                         <comment>Yuno Sandbox Public API Key</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">sandbox</field>
                         </depends>
@@ -43,15 +44,23 @@
                         </depends>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="production_public_api_key" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="sandbox_base_url" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Sandbox Base URL</label>
+                        <comment>Base sandbox URL to test Yuno API</comment>
+                        <depends>
+                            <field id="environment">sandbox</field>
+                        </depends>
+                    </field>
+                    <field id="production_public_api_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Production Public API Key</label>
                         <comment>Yuno Production Public API Key</comment>
+                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">production</field>
                         </depends>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="production_private_secret_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="production_private_secret_key" translate="label" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Production Private Secret Key</label>
                         <comment>Yuno Production Private API Key</comment>
                         <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
@@ -60,23 +69,29 @@
                         </depends>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="account_id" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="production_base_url" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Production Base URL</label>
+                        <comment>Base Production URL to test Yuno API</comment>
+                        <depends>
+                            <field id="environment">production</field>
+                        </depends>
+                    </field>
+                    <field id="account_id" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Account ID</label>
                         <comment>Account ID provided by Yuno</comment>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="user_id" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <field id="user_id" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>User ID</label>
                         <comment>User ID provided by Yuno</comment>
                         <validate>required-entry</validate>
                     </field>
-                    <field id="test_connection_button" translate="label" type="note" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <field id="test_connection_button" translate="label" type="note" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Test Connection</label>
                         <frontend_model>NobleCommerce\Yuno\Block\Adminhtml\System\Config\TestConnectionButton</frontend_model>
                     </field>
-
                 </group>
-                <group id="yuno_behavior" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
+                <group id="yuno_behavior" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Yuno Behaviors</label>
                     <field id="auto_capture" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Automatic Capture</label>
@@ -92,14 +107,14 @@
                         <source_model>NobleCommerce\Yuno\Model\Config\Source\PaymentMethods</source_model>
                     </field>
                 </group>
-                <group id="yuno_security" translate="label" type="text" sortOrder="930" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="yuno_security" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Security</label>
                     <field id="webhook_secret" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Webhook Key (Security)</label>
                         <comment>A secret token to validate webhooks. If filled, reject webhooks whose token does not match</comment>
                     </field>
                 </group>
-                <group id="yuno_logs" translate="label" type="text" sortOrder="940" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="yuno_logs" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Logs and Diagnostics</label>
                     <field id="log_level" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Logging Level</label>

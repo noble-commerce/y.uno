@@ -20,8 +20,10 @@ class ConfigProvider
     public const string XML_PATH_ENVIRONMENT = 'payment/yuno_full_checkout/yuno_credentials/environment';
     public const string XML_PATH_SANDBOX_PUBLIC_API_KEY = 'payment/yuno_full_checkout/yuno_credentials/sandbox_public_api_key';
     public const string XML_PATH_SANDBOX_PRIVATE_SECRET_KEY = 'payment/yuno_full_checkout/yuno_credentials/sandbox_private_secret_key';
+    public const string XML_PATH_SANDBOX_BASE_URL = 'payment/yuno_full_checkout/yuno_credentials/sandbox_base_url';
     public const string XML_PATH_PRODUCTION_PUBLIC_API_KEY = 'payment/yuno_full_checkout/yuno_credentials/production_public_api_key';
     public const string XML_PATH_PRODUCTION_PRIVATE_SECRET_KEY = 'payment/yuno_full_checkout/yuno_credentials/production_private_secret_key';
+    public const string XML_PATH_PRODUCTION_BASE_URL = 'payment/yuno_full_checkout/yuno_credentials/production_base_url';
     public const string XML_PATH_ACCOUNT_ID = 'payment/yuno_full_checkout/yuno_credentials/account_id';
     public const string XML_PATH_USER_ID = 'payment/yuno_full_checkout/yuno_credentials/user_id';
     public const string XML_PATH_AUTO_CAPTURE = 'payment/yuno_full_checkout/yuno_behavior/auto_capture';
@@ -45,7 +47,7 @@ class ConfigProvider
      * @param string|null $storeCode
      * @return bool
      */
-    public function isEnabled(string $storeCode = null): bool
+    public function isEnabled(?string $storeCode = null): bool
     {
         return $this->getFlag(self::XML_PATH_ENABLED, $storeCode);
     }
@@ -56,7 +58,7 @@ class ConfigProvider
      * @param string|null $storeCode
      * @return string|null
      */
-    public function getTitle(string $storeCode = null): ?string
+    public function getTitle(?string $storeCode = null): ?string
     {
         return $this->getValue(self::XML_PATH_TITLE, $storeCode);
     }
@@ -67,7 +69,7 @@ class ConfigProvider
      * @param string|null $storeCode
      * @return string|null
      */
-    public function getEnvironment(string $storeCode = null): ?string
+    public function getEnvironment(?string $storeCode = null): ?string
     {
         return $this->getValue(self::XML_PATH_ENVIRONMENT, $storeCode);
     }
@@ -78,7 +80,7 @@ class ConfigProvider
      * @param string|null $storeCode
      * @return string|null
      */
-    public function getSandboxPublicApiKey(string $storeCode = null): ?string
+    public function getSandboxPublicApiKey(?string $storeCode = null): ?string
     {
         return $this->getValue(self::XML_PATH_SANDBOX_PUBLIC_API_KEY, $storeCode);
     }
@@ -89,9 +91,20 @@ class ConfigProvider
      * @param string|null $storeCode
      * @return string|null
      */
-    public function getSandboxPrivateSecretKey(string $storeCode = null): ?string
+    public function getSandboxPrivateSecretKey(?string $storeCode = null): ?string
     {
         return $this->getValue(self::XML_PATH_SANDBOX_PRIVATE_SECRET_KEY, $storeCode);
+    }
+
+    /**
+     * GetSandboxBaseUrl Method
+     *
+     * @param string|null $storeCode
+     * @return string|null
+     */
+    public function getSandboxBaseUrl(?string $storeCode = null): ?string
+    {
+        return $this->getValue(self::XML_PATH_SANDBOX_BASE_URL, $storeCode);
     }
 
     /**
@@ -114,6 +127,17 @@ class ConfigProvider
     public function getProductionPrivateSecretKey(string $storeCode = null): ?string
     {
         return $this->getValue(self::XML_PATH_PRODUCTION_PRIVATE_SECRET_KEY, $storeCode);
+    }
+
+    /**
+     * GetProductionBaseUrl Method
+     *
+     * @param string|null $storeCode
+     * @return string|null
+     */
+    public function getProductionBaseUrl(?string $storeCode = null): ?string
+    {
+        return $this->getValue(self::XML_PATH_PRODUCTION_BASE_URL, $storeCode);
     }
 
     /**
