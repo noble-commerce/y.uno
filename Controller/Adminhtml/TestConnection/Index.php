@@ -16,41 +16,66 @@ use NobleCommerce\Yuno\Model\Config\ConfigProvider;
 
 class Index extends Action
 {
-    const string ADMIN_RESOURCE = 'NobleCommerce_Yuno::yuno_full_checkout';
+    public const string ADMIN_RESOURCE = 'NobleCommerce_Yuno::yuno_full_checkout';
 
-    /**
-     * Index Constructor
-     *
-     * @param Context $context
-     * @param JsonFactory $resultJsonFactory
-     * @param ConfigProvider $configProvider
-     * @param EncryptorInterface $encryptor
-     */
+    protected JsonFactory $resultJsonFactory;
+    protected ConfigProvider $configProvider;
+    protected EncryptorInterface $encryptor;
+
+    private const string SANDBOX_URL = 'https://api-sandbox.y.uno/v1/customers/';
+    private const string PRODUCTION_URL = 'https://api.y.uno/v1/customers/';
+
     public function __construct(
         Context $context,
-        private readonly JsonFactory $resultJsonFactory,
-        private readonly ConfigProvider $configProvider,
-        private readonly EncryptorInterface $encryptor
+        JsonFactory $resultJsonFactory,
+        ConfigProvider $configProvider,
+        EncryptorInterface $encryptor
     ) {
         parent::__construct($context);
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->configProvider = $configProvider;
+        $this->encryptor = $encryptor;
     }
 
     public function execute()
     {
         $result = $this->resultJsonFactory->create();
+        $environment = $this->configProvider->getEnvironment();
+        $userId = $this->configProvider->getUserId();
 
-        $env = $this->configProvider->getEnvironment();
+        if ($environment === 'sandbox') {
+            return $this->testConnection(
+                self::SANDBOX_URL,
+                $userId,
+                $this->configProvider->getSandboxPublicApiKey(),
+                $this->configProvider->getSandboxPrivateSecretKey(),
+                $result
+            );
+        }
 
-        $publicKey = $env === 'production'
-            ? $this->configProvider->getProductionPublicApiKey()
-            : $this->configProvider->getSandboxPublicApiKey();
+        if ($environment === 'production') {
+            return $this->testConnection(
+                self::PRODUCTION_URL,
+                $userId,
+                $this->configProvider->getProductionPublicApiKey(),
+                $this->configProvider->getProductionPrivateSecretKey(),
+                $result
+            );
+        }
 
-        $privateKeyEncrypted = $env === 'production'
-            ? $this->configProvider->getProductionPrivateSecretKey()
-            : $this->configProvider->getSandboxPrivateSecretKey();
+        return $result->setData([
+            'success' => false,
+            'message' => __('Invalid environment configuration.')
+        ]);
+    }
 
-        $privateKey = $privateKeyEncrypted ? $this->encryptor->decrypt($privateKeyEncrypted) : null;
-
+    private function testConnection(
+        string $baseUrl,
+        ?string $userId,
+        ?string $publicKey,
+        ?string $privateKey,
+        $result
+    ) {
         if (!$publicKey || !$privateKey) {
             return $result->setData([
                 'success' => false,
@@ -58,13 +83,19 @@ class Index extends Action
             ]);
         }
 
+        $privateKeyDecrypted = $this->encryptor->decrypt($privateKey);
+
         try {
             $client = new Client();
+            $idempotencyKey = uniqid('yuno_', true);
 
-            $response = $client->request('GET', 'https://api-sandbox.y.uno/v1/payment-methods', [
+            $response = $client->request('GET', $baseUrl . $userId . '/payment-methods', [
                 'headers' => [
-                    'X-Api-Key' => $publicKey,
-                    'X-Api-Secret' => $privateKey,
+                    'X-Idempotency-Key' => $idempotencyKey,
+                    'accept' => 'application/json',
+                    'content-type' => 'application/json',
+                    'private-secret-key' => $privateKeyDecrypted,
+                    'public-api-key' => $publicKey,
                 ],
                 'http_errors' => false,
                 'timeout' => 5,

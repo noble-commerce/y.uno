@@ -65,6 +65,11 @@
                         <comment>Account ID provided by Yuno</comment>
                         <validate>required-entry</validate>
                     </field>
+                    <field id="user_id" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>User ID</label>
+                        <comment>User ID provided by Yuno</comment>
+                        <validate>required-entry</validate>
+                    </field>
                     <field id="test_connection_button" translate="label" type="note" sortOrder="99" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Test Connection</label>
                         <frontend_model>NobleCommerce\Yuno\Block\Adminhtml\System\Config\TestConnectionButton</frontend_model>
