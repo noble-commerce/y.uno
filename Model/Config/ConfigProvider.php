@@ -23,6 +23,7 @@ class ConfigProvider
     public const string XML_PATH_PRODUCTION_PUBLIC_API_KEY = 'payment/yuno_full_checkout/yuno_credentials/production_public_api_key';
     public const string XML_PATH_PRODUCTION_PRIVATE_SECRET_KEY = 'payment/yuno_full_checkout/yuno_credentials/production_private_secret_key';
     public const string XML_PATH_ACCOUNT_ID = 'payment/yuno_full_checkout/yuno_credentials/account_id';
+    public const string XML_PATH_USER_ID = 'payment/yuno_full_checkout/yuno_credentials/user_id';
     public const string XML_PATH_AUTO_CAPTURE = 'payment/yuno_full_checkout/yuno_behavior/auto_capture';
     public const string XML_PATH_PENDING_STATUS = 'payment/yuno_full_checkout/yuno_behavior/pending_status';
     public const string XML_PATH_ENABLED_METHODS = 'payment/yuno_full_checkout/yuno_behavior/enabled_methods';
@@ -121,9 +122,20 @@ class ConfigProvider
      * @param string|null $storeCode
      * @return string|null
      */
-    public function getAccountId(string $storeCode = null): ?string
+    public function getAccountId(?string $storeCode = null): ?string
     {
         return $this->getValue(self::XML_PATH_ACCOUNT_ID, $storeCode);
+    }
+
+    /**
+     * GetUserId Method
+     *
+     * @param string|null $storeCode
+     * @return string|null
+     */
+    public function getUserId(?string $storeCode = null): ?string
+    {
+        return $this->getValue(self::XML_PATH_USER_ID, $storeCode);
     }
 
     /**
