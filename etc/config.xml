@@ -15,8 +15,10 @@
                     <environment>sandbox</environment>
                     <sandbox_public_api_key></sandbox_public_api_key>
                     <sandbox_private_secret_key></sandbox_private_secret_key>
+                    <sandbox_base_url>https://api-sandbox.y.uno/v1/customers/</sandbox_base_url>
                     <production_public_api_key></production_public_api_key>
                     <production_private_secret_key></production_private_secret_key>
+                    <production_base_url>https://api.y.uno/v1/customers/</production_base_url>
                     <account_id></account_id>
                     <user_id></user_id>
                 </yuno_credentials>
