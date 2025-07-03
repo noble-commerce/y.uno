@@ -101,7 +101,6 @@ class Index extends Action
         }
 
         $privateKeyDecrypted = $this->encryptor->decrypt($privateKey);
-        $publicKeyDecrypted = $this->encryptor->decrypt($publicKey);
 
         try {
             $client = new Client();
@@ -113,7 +112,7 @@ class Index extends Action
                     'accept' => 'application/json',
                     'content-type' => 'application/json',
                     'private-secret-key' => $privateKeyDecrypted,
-                    'public-api-key' => $publicKeyDecrypted,
+                    'public-api-key' => $publicKey,
                 ],
                 'http_errors' => false,
                 'timeout' => 5,
