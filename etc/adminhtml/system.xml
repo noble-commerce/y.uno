@@ -29,7 +29,6 @@
                     <field id="sandbox_public_api_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Sandbox Public API Key</label>
                         <comment>Yuno Sandbox Public API Key</comment>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">sandbox</field>
                         </depends>
@@ -54,7 +53,6 @@
                     <field id="production_public_api_key" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                         <label>Production Public API Key</label>
                         <comment>Yuno Production Public API Key</comment>
-                        <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         <depends>
                             <field id="environment">production</field>
                         </depends>
