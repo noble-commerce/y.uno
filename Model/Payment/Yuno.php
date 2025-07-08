@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order;
 
 class Yuno extends AbstractMethod
 {
-    public const PAYMENT_METHOD_CODE = 'yuno_full_checkout';
+    public const string PAYMENT_METHOD_CODE = 'yuno_full_checkout';
 
     protected $_code = self::PAYMENT_METHOD_CODE;
 
@@ -25,7 +25,7 @@ class Yuno extends AbstractMethod
     protected $_canVoid = true;
     protected $_canUseInternal = false;
     protected $_canUseCheckout = true;
-    protected $_canUseForMultishipping = false;
+    protected bool $_canUseForMultishipping = false;
 
     protected $_isInitializeNeeded = true;
 
@@ -36,5 +36,14 @@ class Yuno extends AbstractMethod
         $stateObject->setIsNotified(false);
 
         return $this;
+    }
+
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null): bool
+    {
+        if (!$this->getConfigData('enabled')) {
+            return false;
+        }
+
+        return parent::isAvailable($quote);
     }
 }

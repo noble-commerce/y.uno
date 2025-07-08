@@ -9,7 +9,7 @@ define([
     'use strict';
 
     rendererList.push({
-        type: 'yuno',
+        type: 'yuno_full_checkout',
         component: 'NobleCommerce_Yuno/js/view/payment/method-renderer/yuno-method'
     });
 
