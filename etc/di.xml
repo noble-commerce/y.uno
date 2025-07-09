@@ -11,4 +11,32 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="yuno" xsi:type="object">NobleCommerce\Yuno\Model\Config\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Gateway\Http\TransferBuilder">
+        <arguments>
+            <argument name="factories" xsi:type="array">
+                <item name="yuno_full_checkout" xsi:type="object">NobleCommerce\Yuno\Gateway\Http\TransferFactory</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="yuno_full_checkout" xsi:type="object">NobleCommerce\Yuno\Gateway\Command\PayCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Gateway\Command\CommandPoolInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="yuno_full_checkout" xsi:type="object">NobleCommerce\Yuno\Gateway\Command\PayCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

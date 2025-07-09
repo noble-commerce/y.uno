@@ -6,9 +6,12 @@
             <label>Yuno Full Checkout</label>
         </group>
     </groups>
-    <methods>
-        <method name="yuno_full_checkout">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-    </methods>
+    <method name="yuno_full_checkout">
+        <allow_multiple_address>0</allow_multiple_address>
+        <gateway>true</gateway>
+        <commands>
+            <command name="capture" type="NobleCommerce\Yuno\Gateway\Command\CaptureCommand" />
+        </commands>
+    </method>
+
 </payment>
