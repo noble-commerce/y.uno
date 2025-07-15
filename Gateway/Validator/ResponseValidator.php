@@ -37,9 +37,14 @@ class ResponseValidator implements ValidatorInterface
     public function validate(array $validationSubject): ResultInterface
     {
         $response = $validationSubject['response'] ?? [];
-        $isValid = isset($response['status']) && $response['status'] === 'CREATED';
+        $validStatuses = ['CREATED', 'APPROVED', 'SUCCESS'];
+        $isValid = isset($response['status']) && in_array($response['status'], $validStatuses, true);
 
-        $errors = !$isValid ? ['Payment failed or returned invalid status'] : [];
+        $errors = !$isValid
+            ? [
+                'Payment failed or returned invalid status: ' . ($response['status'] ?? 'undefined')
+            ]
+            : [];
         return $this->resultFactory->create(['isValid' => $isValid, 'failsDescription' => $errors]);
     }
 }

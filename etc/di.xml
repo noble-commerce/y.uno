@@ -25,18 +25,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Payment\Gateway\Command\CommandPool">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="yuno_full_checkout" xsi:type="object">NobleCommerce\Yuno\Gateway\Command\PayCommand</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Payment\Gateway\Command\CommandPoolInterface">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="yuno_full_checkout" xsi:type="object">NobleCommerce\Yuno\Gateway\Command\PayCommand</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

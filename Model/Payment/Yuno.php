@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use NobleCommerce\Yuno\Model\Config\ConfigProvider;
 
 /**
  * Class Yuno
@@ -37,6 +38,10 @@ class Yuno extends AbstractMethod
     protected bool $_canUseForMultishipping = false;
     protected $_isInitializeNeeded = true;
 
+    public function __construct(
+        private readonly ConfigProvider $configProvider
+    ) {}
+
     /**
      * Initialize
      *
@@ -61,11 +66,11 @@ class Yuno extends AbstractMethod
      */
     public function isAvailable(CartInterface $quote = null): bool
     {
-        if (!$this->getConfigData('enabled')) {
-            return false;
+        $storeCode = $quote?->getStore()->getCode();
+        if ($this->configProvider->isEnabled($storeCode)) {
+            return true;
         }
-
-        return parent::isAvailable($quote);
+        return false;
     }
 
     /**
