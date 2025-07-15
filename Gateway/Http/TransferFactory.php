@@ -35,10 +35,15 @@ class TransferFactory implements TransferFactoryInterface
      */
     public function create(array $request): TransferInterface
     {
-        return $this->transferBuilder
+        $builder = $this->transferBuilder
             ->setBody($request['body'] ?? [])
             ->setMethod($request['method'] ?? 'POST')
-            ->setUri($request['uri'])
-            ->build();
+            ->setUri($request['uri']);
+
+        if (!empty($request['headers'])) {
+            $builder->setHeaders($request['headers']);
+        }
+
+        return $builder->build();
     }
 }

@@ -61,10 +61,10 @@ class CaptureCommand implements CommandInterface
         try {
             $response = $this->client->placeRequest($transfer);
         } catch (ClientException|ConverterException $e) {
-
+            throw new CommandException(__('Yuno capture error: %1', $e->getMessage()));
         }
 
-        if (!isset($response['status']) || $response['status'] !== 'success') {
+        if (empty($response) || !isset($response['status']) || $response['status'] !== 'success') {
             throw new CommandException(__('Yuno capture failed.'));
         }
 

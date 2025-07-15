@@ -64,8 +64,29 @@ class Client implements ClientInterface
                     throw new LocalizedException(__("Unsupported method: %1", $method));
             }
 
+            $status = $this->curl->getStatus();
             $response = $this->curl->getBody();
-            return json_decode($response, true) ?? [];
+            $decoded = json_decode($response, true);
+
+            if ($status < 200 || $status >= 300) {
+                $this->logger->error('[Yuno Gateway] HTTP Error', [
+                    'status' => $status,
+                    'response' => $response,
+                    'uri' => $uri,
+                    'method' => $method,
+                    'body' => $body
+                ]);
+                throw new LocalizedException(__('Payment communication error.'));
+            }
+
+            if ($decoded === null && json_last_error() !== JSON_ERROR_NONE) {
+                $this->logger->error('[Yuno Gateway] Invalid JSON response', [
+                    'response' => $response
+                ]);
+                throw new LocalizedException(__('Invalid response from payment gateway.'));
+            }
+
+            return $decoded;
         } catch (\Throwable $e) {
             $this->logger->error('[Yuno Gateway] HTTP Error: ' . $e->getMessage());
             throw new LocalizedException(__('Payment communication error.'));

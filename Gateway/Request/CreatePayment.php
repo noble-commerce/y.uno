@@ -36,22 +36,32 @@ class CreatePayment implements BuilderInterface
     {
         $amount = $buildSubject['amount'];
         $currency = $buildSubject['currency'];
-        $token = $buildSubject['payment']->getAdditionalInformation('ott');
-        $sessionId = $buildSubject['payment']->getAdditionalInformation('sessionId');
+        $payment = $buildSubject['payment'];
+        $token = $payment->getAdditionalInformation('ott');
+        $sessionId = $payment->getAdditionalInformation('sessionId');
+        $storeCode = $payment->getOrder()?->getStore()->getCode();
+
+        $isProduction = $this->config->getEnvironment($storeCode) === 'production';
+        $baseUrl = $isProduction
+            ? rtrim((string) $this->config->getProductionBaseUrl($storeCode), '/')
+            : rtrim((string) $this->config->getSandboxBaseUrl($storeCode), '/');
+        $privateKey = $isProduction
+            ? (string) $this->config->getProductionPrivateSecretKey($storeCode)
+            : (string) $this->config->getSandboxPrivateSecretKey($storeCode);
 
         return [
-            'body' => json_encode([
+            'body' => [
                 'checkout_session' => $sessionId,
                 'one_time_token' => $token,
-                'capture' => $this->config->isAutoCapture(),
+                'capture' => $this->config->isAutoCapture($storeCode),
                 'amount' => $amount,
                 'currency' => $currency,
-            ]),
+            ],
             'headers' => [
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $this->config->getProductionPrivateSecretKey()
+                'Authorization' => 'Bearer ' . $privateKey
             ],
-            'endpoint' => $this->config->getProductionBaseUrl() . 'payments'
+            'uri' => $baseUrl . '/payments'
         ];
     }
 }

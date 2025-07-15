@@ -15,7 +15,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class ConfigProvider
 {
-    public const string XML_PATH_ENABLED = 'payment/yuno_full_checkout/yuno_general/enabled';
+    public const string XML_PATH_ENABLED = 'payment/yuno_full_checkout/enabled';
     public const string XML_PATH_TITLE = 'payment/yuno_full_checkout/yuno_general/title';
     public const string XML_PATH_ENVIRONMENT = 'payment/yuno_full_checkout/yuno_credentials/environment';
     public const string XML_PATH_SANDBOX_PUBLIC_API_KEY = 'payment/yuno_full_checkout/yuno_credentials/sandbox_public_api_key';
