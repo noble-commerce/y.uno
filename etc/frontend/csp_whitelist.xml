@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+  Copyright © 2025 NobleCommerce. All rights reserved.
+  See COPYING.txt for license details.
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Csp/etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="yuno-cdn" type="host">https://cdn.y.uno</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

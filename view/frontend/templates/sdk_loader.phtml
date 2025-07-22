@@ -2,16 +2,4 @@
   Copyright © 2025 NobleCommerce. All rights reserved.
   See COPYING.txt for license details.
 -->
-<script type="text/javascript">
-    (function (w, d, s, u, f, js, fjs) {
-        if (w.Yuno) return;
-        f = w.Yuno = function () {
-            f._queue.push(arguments);
-        };
-        f._queue = [];
-        js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];
-        js.src = "https://cdn.y.uno/sdk/v1/yuno-checkout.js";
-        js.async = 1;
-        fjs.parentNode.insertBefore(js, fjs);
-    })(window, document, 'script');
-</script>
+<script src="https://cdn.y.uno/sdk/v1/yuno-checkout.js" async></script>
