@@ -76,18 +76,4 @@ define([
             return false;
         }
     });
-
-    function loadYunoScript() {
-        if (window.Yuno) {
-            return;
-        }
-
-        const script = document.createElement('script');
-        script.src = 'https://cdn.y.uno/sdk/v1/yuno-checkout.js';
-        script.async = true;
-        script.onload = function () {
-            console.log('Yuno SDK loaded.');
-        };
-        document.head.appendChild(script);
-    }
 });
