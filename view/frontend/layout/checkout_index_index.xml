@@ -17,6 +17,9 @@
                     <item name="components" xsi:type="array">
                         <item name="yuno_full_checkout" xsi:type="array">
                             <item name="component" xsi:type="string">NobleCommerce_Yuno/js/view/payment/method-renderer/yuno-method</item>
+                            <item name="config" xsi:type="array">
+                                <item name="template" xsi:type="string">NobleCommerce_Yuno/payment/yuno</item>
+                            </item>
                         </item>
                     </item>
                 </argument>
