@@ -1,79 +1,62 @@
-/*
- * Copyright © 2025 NobleCommerce. All rights reserved.
- * See COPYING.txt for license details.
- */
+<!--
+  Copyright © 2025 NobleCommerce. All rights reserved.
+  See COPYING.txt for license details.
+-->
 define([
-    'Magento_Checkout/js/view/payment/default',
-    'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/full-screen-loader',
-    'jquery'
-], function (Component, quote, fullScreenLoader, $) {
+    'uiComponent',
+    'jquery',
+    'NobleCommerce_Yuno/js/yuno-sdk-loader'
+], function (Component, $, loadSdk) {
     'use strict';
 
     return Component.extend({
-        defaults: {
-            template: 'NobleCommerce_Yuno/payment/yuno'
-        },
-
         initialize: function () {
             this._super();
-            this.isChecked.subscribe(function (checked) {
-                if (checked) {
-                    loadYunoScript();
-                }
-            });
-            return this;
-        },
 
-        getCode: function () {
-            return 'yuno_full_checkout';
-        },
+            const config = window.checkoutConfig?.payment?.yuno_full_checkout;
+            const publicKey = config?.publicKey;
 
-        /**
-         * Overrides the default action of the "Finalize Order" button
-         */
-        placeOrder: function (data, event) {
-            event.preventDefault();
-
-            if (!this.validate() || !this.isPlaceOrderActionAllowed()) {
-                return false;
+            if (!publicKey) {
+                console.error('Yuno publicKey is not defined in checkoutConfig');
+                return;
             }
 
-            fullScreenLoader.startLoader();
+            if (window.yuno && window.yuno._initialized) {
+                console.info('Yuno SDK already loaded.');
+                return;
+            }
 
-            window.Yuno.createPaymentToken({
-                onSuccess: function (ottResponse) {
-                    const ott = ottResponse.token;
-                    const sessionId = ottResponse.sessionId;
-                    const quoteId = quote.getQuoteId();
-
-                    $.post(
-                        '/yuno/payment/create',
-                        {
-                            token: ott,
-                            sessionId: sessionId,
-                            quoteId: quoteId
+            $(document).ready(() => {
+                loadSdk()
+                    .then(() => yuno.initialize(publicKey))
+                    .then(() => {
+                        if (!document.getElementById('yuno-apm-form')) {
+                            $('<div id="yuno-apm-form"></div>').appendTo('#yuno-checkout-container');
                         }
-                    ).done(function (response) {
-                        fullScreenLoader.stopLoader();
-
-                        if (response.success && response.redirect) {
-                            window.location.href = response.redirect;
-                        } else {
-                            alert(response.message || 'Error creating Yuno payment.');
+                        if (!document.getElementById('yuno-action-form')) {
+                            $('<div id="yuno-action-form"></div>').appendTo('#yuno-checkout-container');
                         }
-                    }).fail(function () {
-                        fullScreenLoader.stopLoader();
-                        alert('Server communication error.');
+
+                        return yuno.startCheckout({
+                            renderMode: {
+                                type: 'element',
+                                elementSelector: {
+                                    apmForm: '#yuno-apm-form',
+                                    actionForm: '#yuno-action-form'
+                                }
+                            }
+                        });
+                    })
+                    .then(() => {
+                        window.yuno._initialized = true;
+                        console.log('Yuno SDK initialized and rendered');
+                    })
+                    .catch((e) => {
+                        console.error('Error initializing or rendering Yuno SDK:', e);
                     });
-                },
-                onError: function (err) {
-                    fullScreenLoader.stopLoader();
-                    alert('Error generating token: ' + err.message);
-                }
             });
 
-            return false;
+            return this;
         }
     });
 });

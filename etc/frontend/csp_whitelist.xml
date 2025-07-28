@@ -7,7 +7,7 @@
     <policies>
         <policy id="script-src">
             <values>
-                <value id="yuno-cdn" type="host">https://cdn.y.uno</value>
+                <value id="yuno-sdk-web" type="host">https://sdk-web.y.uno</value>
             </values>
         </policy>
     </policies>

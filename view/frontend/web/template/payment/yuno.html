@@ -12,7 +12,24 @@
             <span data-bind="i18n: 'Payment with Yuno'"></span>
         </label>
     </div>
+
     <div class="payment-method-content">
-        <p data-bind="i18n: 'You will be redirected to Yuno's secure checkout after clicking Checkout.'"></p>
+        <p data-bind="i18n: 'You will be redirected to Yuno\'s secure checkout after clicking Checkout.'"></p>
+
+        <div id="yuno-checkout-container">
+            <div id="yuno-apm-form"></div>
+            <div id="yuno-action-form"></div>
+        </div>
     </div>
 </div>
+
+<style>
+    #yuno-checkout-container,
+    #yuno-apm-form,
+    #yuno-action-form {
+        min-height: 200px;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        padding: 10px;
+    }
+</style>
