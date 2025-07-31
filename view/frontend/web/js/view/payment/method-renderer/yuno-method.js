@@ -1,7 +1,7 @@
-<!--
-  Copyright © 2025 NobleCommerce. All rights reserved.
-  See COPYING.txt for license details.
--->
+/*
+* Copyright © 2025 NobleCommerce. All rights reserved.
+* See COPYING.txt for license details.
+*/
 define([
     'uiComponent',
     'jquery',
@@ -12,7 +12,7 @@ define([
     return Component.extend({
         initialize: function () {
             this._super();
-
+            console.log('Yuno payment method component initialized');
             const config = window.checkoutConfig?.payment?.yuno_full_checkout;
             const publicKey = config?.publicKey;
 

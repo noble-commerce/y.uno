@@ -12,22 +12,28 @@ define([], function () {
                 return;
             }
 
-            const head = document.getElementsByTagName('head')[0];
-            const js = document.createElement('script');
-            js.src = "https://sdk-web.y.uno/v1.1/main.js";
-            js.defer = true;
+            if (document.getElementById('yuno-sdk-script')) {
+                window.addEventListener('yuno-sdk-ready', () => resolve(true));
+                return;
+            }
 
-            js.onerror = function (error) {
+            const script = document.createElement('script');
+            script.id = 'yuno-sdk-script';
+            script.src = 'https://sdk-web.y.uno/v1.1/main.js';
+            script.async = true;
+            script.defer = true;
+
+            script.onerror = function (error) {
                 const event = new CustomEvent('yuno-sdk-error', { detail: error });
                 window.dispatchEvent(event);
-                reject(new Error(`Failed to load script: ${js.src}`));
+                reject(new Error(`Yuno SDK failed to load: ${script.src}`));
             };
 
             window.addEventListener('yuno-sdk-ready', function () {
                 resolve(true);
             });
 
-            head.appendChild(js);
+            document.head.appendChild(script);
         });
     };
 });
