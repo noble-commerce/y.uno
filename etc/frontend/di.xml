@@ -23,5 +23,11 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Payment\Model\Config">
+        <arguments>
+            <argument name="methods" xsi:type="array">
+                <item name="yuno_full_checkout" xsi:type="string">NobleCommerce\Yuno\Model\Payment\Yuno</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

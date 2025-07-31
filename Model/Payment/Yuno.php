@@ -9,8 +9,6 @@ namespace NobleCommerce\Yuno\Model\Payment;
 
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Sales\Model\Order;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Model\InfoInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use NobleCommerce\Yuno\Model\Config\ConfigProvider;
 
@@ -22,12 +20,9 @@ use NobleCommerce\Yuno\Model\Config\ConfigProvider;
  */
 class Yuno extends AbstractMethod
 {
-    public const string PAYMENT_METHOD_CODE = 'yuno_full_checkout';
-
+    public const PAYMENT_METHOD_CODE = 'yuno_full_checkout';
     protected $_code = self::PAYMENT_METHOD_CODE;
-
     protected $_isOffline = false;
-
     protected $_canAuthorize = true;
     protected $_canCapture = true;
     protected $_canCapturePartial = false;
@@ -35,9 +30,13 @@ class Yuno extends AbstractMethod
     protected $_canVoid = true;
     protected $_canUseInternal = false;
     protected $_canUseCheckout = true;
-    protected bool $_canUseForMultishipping = false;
     protected $_isInitializeNeeded = true;
 
+    /**
+     * Yuno constructor.
+     *
+     * @param ConfigProvider $configProvider
+     */
     public function __construct(
         private readonly ConfigProvider $configProvider
     ) {}
@@ -61,38 +60,31 @@ class Yuno extends AbstractMethod
     /**
      * IsAvailable
      *
+     * This method checks if the payment method is available for the given quote.
+     *
      * @param CartInterface|null $quote
      * @return bool
      */
     public function isAvailable(CartInterface $quote = null): bool
     {
-        $storeCode = $quote?->getStore()->getCode();
-        if ($this->configProvider->isEnabled($storeCode)) {
-            return true;
+        if (!$quote) {
+            return false;
         }
-        return false;
+
+        $storeCode = $quote->getStore()->getCode();
+
+        return $this->configProvider->isEnabled($storeCode);
     }
 
     /**
-     * Authorize
+     * CanUseCheckout
      *
-     * @param InfoInterface $payment
-     * @param float $amount
-     * @return mixed
-     * @throws LocalizedException
+     * This method checks if the payment method can be used during checkout.
+     *
+     * @return bool
      */
-    public function capture(InfoInterface $payment, $amount): mixed
+    public function canUseCheckout(): bool
     {
-        if (!$amount) {
-            throw new LocalizedException(__('Invalid amount for capture.'));
-        }
-
-        return $this->gateway->getCommand('yuno_full_checkout')->execute([
-            'payment' => $payment,
-            'amount' => $amount,
-            'currency' => $payment->getOrder()->getOrderCurrencyCode()
-        ]);
+        return true;
     }
-
-
 }
