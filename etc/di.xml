@@ -25,4 +25,8 @@
             </argument>
         </arguments>
     </type>
+    <preference for="NobleCommerce\Yuno\Api\YunoTransactionRepositoryInterface"
+                type="NobleCommerce\Yuno\Model\YunoTransactionRepository"/>
+    <preference for="NobleCommerce\Yuno\Api\YunoTransactionInterface"
+                type="NobleCommerce\Yuno\Model\YunoTransaction"/>
 </config>
