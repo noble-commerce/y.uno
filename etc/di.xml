@@ -14,7 +14,14 @@
     <type name="Magento\Payment\Gateway\Config\Config">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="yuno" xsi:type="object">NobleCommerce\Yuno\Model\Config\ConfigProvider</item>
+                <item name="yuno" xsi:type="object">NobleCommerce\Yuno\Model\Config\YunoConfig</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\ConfigProviderInterface">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="yuno_full_checkout" xsi:type="object">NobleCommerce\Yuno\Model\Config\YunoConfigProvider</item>
             </argument>
         </arguments>
     </type>
@@ -27,6 +34,6 @@
     </type>
     <preference for="NobleCommerce\Yuno\Api\YunoTransactionRepositoryInterface"
                 type="NobleCommerce\Yuno\Model\YunoTransactionRepository"/>
-    <preference for="NobleCommerce\Yuno\Api\YunoTransactionInterface"
+    <preference for="NobleCommerce\Yuno\Api\Data\YunoTransactionInterface"
                 type="NobleCommerce\Yuno\Model\YunoTransaction"/>
 </config>

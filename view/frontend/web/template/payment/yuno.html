@@ -1,24 +1,41 @@
-<!--
-  Copyright © 2025 NobleCommerce. All rights reserved.
-  See COPYING.txt for license details.
--->
-<div class="payment-method" data-bind="css: {'_active': isChecked()}">
+<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
         <input type="radio"
                name="payment[method]"
                class="radio"
-               data-bind="attr: {id: getCode()}, value: getCode(), checked: isChecked" />
-        <label data-bind="attr: {for: getCode()}">
-            <span data-bind="i18n: 'Payment with Yuno'"></span>
+               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <label class="label" data-bind="attr: {'for': getCode()}">
+            <span data-bind="text: getTitle()"></span>
         </label>
     </div>
 
     <div class="payment-method-content">
-        <p data-bind="i18n: 'You will be redirected to Yuno\'s secure checkout after clicking Checkout.'"></p>
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
 
-        <div id="yuno-checkout-container">
-            <div id="yuno-apm-form"></div>
-            <div id="yuno-action-form"></div>
+        <div class="field required">
+            <label data-bind="attr: {for: getCode() + '_yuno_field'}" class="label">
+                <span><!-- ko i18n: 'Yuno Field'--><!-- /ko --></span>
+            </label>
+
+            <div class="control">
+                <!-- Campo customizado para o SDK da Yuno -->
+                <div id="yuno-sdk-container"></div>
+            </div>
+        </div>
+
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button class="action primary checkout"
+                        type="submit"
+                        data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')}
+                        ">
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

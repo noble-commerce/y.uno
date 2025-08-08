@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace NobleCommerce\Yuno\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use NobleCommerce\Yuno\Model\Config\ConfigProvider;
+use NobleCommerce\Yuno\Model\Config\YunoConfig;
 
 /**
  * Class CreatePayment
@@ -20,10 +20,10 @@ class CreatePayment implements BuilderInterface
     /**
      * CreatePayment constructor.
      *
-     * @param ConfigProvider $config
+     * @param YunoConfig $config
      */
     public function __construct(
-        private readonly ConfigProvider $config
+        private readonly YunoConfig $config
     ) {}
 
     /**

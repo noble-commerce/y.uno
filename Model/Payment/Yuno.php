@@ -10,7 +10,7 @@ namespace NobleCommerce\Yuno\Model\Payment;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Sales\Model\Order;
 use Magento\Quote\Api\Data\CartInterface;
-use NobleCommerce\Yuno\Model\Config\ConfigProvider;
+use NobleCommerce\Yuno\Model\Config\YunoConfig;
 
 /**
  * Class Yuno
@@ -35,10 +35,10 @@ class Yuno extends AbstractMethod
     /**
      * Yuno constructor.
      *
-     * @param ConfigProvider $configProvider
+     * @param YunoConfig $configProvider
      */
     public function __construct(
-        private readonly ConfigProvider $configProvider
+        private readonly YunoConfig $configProvider
     ) {}
 
     /**

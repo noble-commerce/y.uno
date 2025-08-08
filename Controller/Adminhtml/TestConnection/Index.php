@@ -15,7 +15,7 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
-use NobleCommerce\Yuno\Model\Config\ConfigProvider;
+use NobleCommerce\Yuno\Model\Config\YunoConfig;
 
 class Index extends Action
 {
@@ -24,13 +24,13 @@ class Index extends Action
      *
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param ConfigProvider $configProvider
+     * @param YunoConfig $configProvider
      * @param EncryptorInterface $encryptor
      */
     public function __construct(
-        private readonly Context $context,
-        protected readonly JsonFactory $resultJsonFactory,
-        protected readonly ConfigProvider $configProvider,
+        private readonly Context              $context,
+        protected readonly JsonFactory        $resultJsonFactory,
+        protected readonly YunoConfig         $configProvider,
         protected readonly EncryptorInterface $encryptor
     ) {
         parent::__construct($context);
