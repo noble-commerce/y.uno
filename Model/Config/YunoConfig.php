@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Provides access to configuration settings for the Yuno Full Checkout payment module.
  */
-class ConfigProvider
+class YunoConfig
 {
     public const string XML_PATH_ENABLED = 'payment/yuno_full_checkout/enabled';
     public const string XML_PATH_TITLE = 'payment/yuno_full_checkout/yuno_general/title';
@@ -33,7 +33,7 @@ class ConfigProvider
     public const string XML_PATH_LOG_LEVEL = 'payment/yuno_full_checkout/yuno_logs/log_level';
 
     /**
-     * ConfigProvider Constructor.
+     * YunoConfig Constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      */

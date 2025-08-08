@@ -3,13 +3,18 @@
 * See COPYING.txt for license details.
 */
 define([
-    'uiComponent',
+    'Magento_Checkout/js/view/payment/default',
     'jquery',
     'NobleCommerce_Yuno/js/yuno-sdk-loader'
 ], function (Component, $, loadSdk) {
     'use strict';
 
     return Component.extend({
+        defaults: {
+            template: 'NobleCommerce_Yuno/payment/yuno',
+            transactionResult: ''
+        },
+
         initialize: function () {
             this._super();
             console.log('Yuno payment method component initialized');
@@ -57,6 +62,37 @@ define([
             });
 
             return this;
+        },
+
+        initObservable: function () {
+            this._super()
+                .observe([
+                    'transactionResult'
+                ]);
+            return this;
+        },
+
+        getCode: function () {
+            return 'yuno_full_checkout';
+        },
+
+        getData: function () {
+            return {
+                'method': this.item.method,
+                'additional_data': {
+                    'transaction_result': this.transactionResult()
+                }
+            };
+        },
+
+        getTransactionResults: function () {
+            const config = window.checkoutConfig?.payment?.yuno_full_checkout;
+            return _.map(config?.transactionResults || {}, function (value, key) {
+                return {
+                    'value': key,
+                    'transaction_result': value
+                };
+            });
         }
     });
 });

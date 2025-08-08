@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace NobleCommerce\Yuno\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use NobleCommerce\Yuno\Model\Config\ConfigProvider as YunoBackendConfig;
+use NobleCommerce\Yuno\Model\Config\YunoConfig as YunoBackendConfig;
 
 class ConfigProvider implements ConfigProviderInterface
 {

@@ -11,14 +11,37 @@
                    name="yuno.checkout.sdk"
                    template="NobleCommerce_Yuno::sdk_loader.phtml" />
         </referenceContainer>
-        <referenceBlock name="checkout.payment.methods.list">
+        <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">
                     <item name="components" xsi:type="array">
-                        <item name="yuno_full_checkout" xsi:type="array">
-                            <item name="component" xsi:type="string">NobleCommerce_Yuno/js/view/payment/method-renderer/yuno-method</item>
-                            <item name="config" xsi:type="array">
-                                <item name="template" xsi:type="string">NobleCommerce_Yuno/payment/yuno</item>
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="billing-step" xsi:type="array">
+                                            <item name="component" xsi:type="string">uiComponent</item>
+                                            <item name="children" xsi:type="array">
+                                                <item name="payment" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="renders" xsi:type="array">
+                                                            <item name="children" xsi:type="array">
+                                                                <item name="yuno_full_checkout" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">NobleCommerce_Yuno/js/view/payment/method-renderer/yuno-method</item>
+                                                                    <item name="methods" xsi:type="array">
+                                                                        <item name="yuno_full_checkout" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
                             </item>
                         </item>
                     </item>

@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace NobleCommerce\Yuno\Model;
 
 use Magento\Framework\HTTP\Client\Curl;
-use NobleCommerce\Yuno\Model\Config\ConfigProvider;
+use NobleCommerce\Yuno\Model\Config\YunoConfig;
 use Psr\Log\LoggerInterface;
 
 class ApiClient
 {
     public function __construct(
-        private readonly Curl $curl,
-        private readonly ConfigProvider $configProvider,
+        private readonly Curl            $curl,
+        private readonly YunoConfig      $configProvider,
         private readonly LoggerInterface $logger
     ) {}
 
