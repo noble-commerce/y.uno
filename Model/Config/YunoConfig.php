@@ -31,6 +31,8 @@ class YunoConfig
     public const string XML_PATH_ENABLED_METHODS = 'payment/yuno_full_checkout/yuno_behavior/enabled_methods';
     public const string XML_PATH_WEBHOOK_SECRET = 'payment/yuno_full_checkout/yuno_security/webhook_secret';
     public const string XML_PATH_LOG_LEVEL = 'payment/yuno_full_checkout/yuno_logs/log_level';
+    public const string ENVIRONMENT_SANDBOX = 'sandbox';
+    public const string ENVIRONMENT_PRODUCTION = 'production';
 
     /**
      * YunoConfig Constructor.

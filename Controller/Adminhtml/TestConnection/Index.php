@@ -3,6 +3,7 @@
  * Copyright © 2025 NobleCommerce. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace NobleCommerce\Yuno\Controller\Adminhtml\TestConnection;
@@ -16,6 +17,8 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use NobleCommerce\Yuno\Model\Config\YunoConfig;
+use NobleCommerce\Yuno\Model\Service\YunoClient;
+use Throwable;
 
 class Index extends Action
 {
@@ -26,12 +29,14 @@ class Index extends Action
      * @param JsonFactory $resultJsonFactory
      * @param YunoConfig $configProvider
      * @param EncryptorInterface $encryptor
+     * @param YunoClient $yunoClient
      */
     public function __construct(
-        private readonly Context              $context,
-        protected readonly JsonFactory        $resultJsonFactory,
-        protected readonly YunoConfig         $configProvider,
-        protected readonly EncryptorInterface $encryptor
+        private readonly Context $context,
+        protected readonly JsonFactory $resultJsonFactory,
+        protected readonly YunoConfig $configProvider,
+        protected readonly EncryptorInterface $encryptor,
+        protected readonly YunoClient $yunoClient,
     ) {
         parent::__construct($context);
     }
@@ -44,35 +49,23 @@ class Index extends Action
     public function execute(): Json|ResultInterface|ResponseInterface
     {
         $result = $this->resultJsonFactory->create();
-        $environment = $this->configProvider->getEnvironment();
         $userId = $this->configProvider->getUserId();
-        $sandboxBaseUrl = $this->configProvider->getSandboxBaseUrl();
-        $productionBaseUrl = $this->configProvider->getProductionBaseUrl();
 
-        if ($environment === 'sandbox') {
+        try {
+            $environmentConfig = $this->yunoClient->getEnvironmentConfig();
             return $this->testConnection(
-                $sandboxBaseUrl,
+                $environmentConfig['base_url'],
                 $userId,
-                $this->configProvider->getSandboxPublicApiKey(),
-                $this->configProvider->getSandboxPrivateSecretKey(),
+                $environmentConfig['public_key'],
+                $environmentConfig['private_key'],
                 $result
             );
+        } catch (\Exception $e) {
+            return $result->setData([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
-
-        if ($environment === 'production') {
-            return $this->testConnection(
-                $productionBaseUrl,
-                $userId,
-                $this->configProvider->getProductionPublicApiKey(),
-                $this->configProvider->getProductionPrivateSecretKey(),
-                $result
-            );
-        }
-
-        return $result->setData([
-            'success' => false,
-            'message' => __('Invalid environment configuration.')
-        ]);
     }
 
     /**
@@ -104,16 +97,10 @@ class Index extends Action
 
         try {
             $client = new Client();
-            $idempotencyKey = uniqid('yuno_', true);
+            $headers = $this->yunoClient->buildHeaders($privateKeyDecrypted, $publicKey);
 
             $response = $client->request('GET', $baseUrl . $userId . '/payment-methods', [
-                'headers' => [
-                    'X-Idempotency-Key' => $idempotencyKey,
-                    'accept' => 'application/json',
-                    'content-type' => 'application/json',
-                    'private-secret-key' => $privateKeyDecrypted,
-                    'public-api-key' => $publicKey,
-                ],
+                'headers' => $headers,
                 'http_errors' => false,
                 'timeout' => 5,
             ]);
@@ -132,7 +119,7 @@ class Index extends Action
                 'success' => false,
                 'message' => __('Error [%1]: %2', $statusCode, $body)
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $result->setData([
                 'success' => false,
                 'message' => __('Exception: %1', $e->getMessage())
